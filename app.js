@@ -27,3 +27,15 @@
 // crypto module is uswd for security 
 //crypto for password 
 //dns k barre m it converts domain names into ip adress 
+//process object 
+//env are supar global data to access env variables
+
+const process = require('process');
+//console.log(process.argv[2]);
+//command line s humesha string m jaega data agr terminal m number type krega to bhi string m jaega
+//index 2 p milegi 
+//dot env karengfe it act as a bridge to join process and env file
+//structural digram 
+//process->dotenv->env file
+require('dotenv').config();
+console.log(process.env.PORT);
