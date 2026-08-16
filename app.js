@@ -38,4 +38,27 @@ const process = require('process');
 //structural digram 
 //process->dotenv->env file
 require('dotenv').config();
-console.log(process.env.PORT);
+// console.log(process.env.PORT);
+
+//----------------------------------------------------------------------------------------------
+// git checkout -b 7-aug   
+// >> git add .
+// >> git commit -m "changes for 7 aug"
+// >> git push -u origin 7-aug
+
+
+//____________________________________________________________________________________________
+//day3
+//require http module to create a server
+//REQUEST - INCPOMING
+//RESPONSE - OUTGOING finish the request and send the response to the client
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write('<h1>Hello, World!</h1>');
+  res.write('<p>This is a simple HTTP server created using Node.js.</p>');
+  res.end();
+});
+server.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
