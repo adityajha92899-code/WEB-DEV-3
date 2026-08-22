@@ -3,84 +3,41 @@ const path = require('path');
 const toursFilePath = path.join(__dirname, '../data/tour.json');
 
 const getAll = () => {
-    const toursData = fs.readFileSync(toursFilePath, 'utf-8');
-    return JSON.parse(toursData);
+    const tourData = fs.readFileSync(toursFilePath, 'utf-8');
+    return JSON.parse(tourData);
 };
 
 const getById = (id) => {
-    const toursData = getAll();
-    const tourId = Number(id);
-    return toursData.find(tour => tour.id === tourId);
+    const tours = getAll();
+    return tours.find(tour => tour.id === id);
 };
 
 const getByQuery = (query) => {
-    const toursData = getAll();
-    return toursData.filter(tour =>
-        Object.entries(query).every(([key, value]) =>
-            tour[key] !== undefined &&
-            String(tour[key]).toLowerCase() === String(value).toLowerCase()
-        )
-    );
-};
-
-const save = (tours) => {
-    fs.writeFileSync(toursFilePath, JSON.stringify(tours, null, 2));
-};
-
-// write post put delete functions here
-
-const create = (tour) => {
-    const toursData = getAll();
-    toursData.push(tour);
-    fs.writeFileSync(toursFilePath, JSON.stringify(toursData));
-};
-
-const update = (id, updatedTour) => {
-    const toursData = getAll();
-    const tourId = Number(id);
-    const index = toursData.findIndex(tour => tour.id === tourId);
-    if (index !== -1) {
-        toursData[index] = { ...toursData[index], ...updatedTour };
-        fs.writeFileSync(toursFilePath, JSON.stringify(toursData));
-    }
-};
-
-const remove = (id) => {
-    const toursData = getAll();
-    const tourId = Number(id);
-    const filteredTours = toursData.filter(tour => tour.id !== tourId);
-    fs.writeFileSync(toursFilePath, JSON.stringify(filteredTours));
-};
-
-const save = (newTours) => {
     const tours = getAll();
-    tours.push(...newTours);
-    fs.writeFileSync(toursFilePath, JSON.stringify(tours, null, 2));
-}
-
-const updateTour = (id, updatedTour) => {
+    return tours.filter(tour => tour.name.includes(query));
+};
+//////////////////////////////// 
+// put k liye update function banaya hai jo model me hoga aur controller me call hoga
+const update = (id, updatedData) => {
     const tours = getAll();
-
-    const index = tours.findIndex(tour => tour.id === id);
-    if (index === -1) {
-        return null; // Tour not found
-
-    tours[index] = {id, ...updatedTour};
+    const index = tours.findIndex(tour => tour.id === id);//find index is faster 
+    if (index === -1) return null;///id dhundhenge this is for put agr nhi mila to null return hoga
     
-    fs.writeFileSync(toursFilePath, JSON.stringify(tours));
 
-    return tours[index]; // Return the updated tour
-    }
-}
+    tours[index] = { ...tours[index], ...updatedData, id };
+    fs.writeFileSync(toursFilePath, JSON.stringify(tours, null, 2));//id ko updayte karne ke liye writeFileSync ka use kiya hai
+    return tours[index];
+};
+
+const save = (tour) => {
+    const tours = getAll();
+    tours.push(tour);
+    fs.writeFileSync(toursFilePath, JSON.stringify(tours, null, 2));
+};
 
 module.exports = {
     getAll,
     getById,
     getByQuery,
-    create,
-    update,
-    remove,
     save
-};
-
-// index.js --> routes/tourRoutes.js --> controller/tourController.js --> model/tourModel.js
+};//

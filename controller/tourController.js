@@ -1,48 +1,44 @@
-const tourModel = require('../model/tourModel')
+const tourModel = require('../model/tourModel');
 
-// Get all tours
 const getAllTours = (req, res) => {
     const tours = tourModel.getAll();
     res.json(tours);
-}
+};
 
-// Get a single tour by ID
 const getTourById = (req, res) => {
-    const tour = tourModel.getById(req.params.id);
+    const id = parseInt(req.params.id);
+    const tour = tourModel.getById(id);
     if (!tour) {
-        return res.status(404).json({ message: 'Tour not found' });
+        return res.status(404).json({ message: 'Tour Not Found' });
     }
     res.json(tour);
 };
 
-// Get tours matching the supplied query parameters.
-const getTourByQuery = (req, res) => {
-    const query = req.query.name;
-    const tours = tourModel.getByQuery(req.query);
+const getToursByQuery = (req, res) => {
+    const { query } = req.query;
+    const tours = tourModel.getByQuery(query);
     res.json(tours);
 };
 
-const getByQuery = (req, res) => {
-    return tours.filter(tour => tour.name.includes(query));
-}
-
-const saveTours = (req, res) => {
-    const tours = req.body;
-    tourModel.save(tours);
-    res.status(201).json({ message: 'Tours saved successfully' });
-}
-
-
+const save = (req, res) => {
+    const tour = req.body;
+    tourModel.save(tour);
+    res.status(201).json({ message: 'Tour created successfully' });
+};
 const updateTour = (req, res) => {
     const id = req.params.id;
-    const data = req.body;
-    tourModel.updateTour(id, data);
-    res.status(200).json({ message: 'Tour updated successfully' });
-}
+    const updatedData = req.body;
+    const updatedTour = tourModel.update(id, updatedData);
+    if (!updatedTour) {
+        return res.status(404).json({ message: 'Tour Not Found' });
+    }
+    res.json(updatedTour);
+};
 
 module.exports = {
     getAllTours,
     getTourById,
-    getTourByQuery,
-    saveTours
-};
+    getToursByQuery,
+    save,
+    updateTour
+};  

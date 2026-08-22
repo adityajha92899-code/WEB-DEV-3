@@ -1,45 +1,71 @@
-// // after calling a function, it returns an object it is called factory function
-// const express = require('express');
+// const express = require("express");
+// const packages = require("./data/tour.js");
+
 // const app = express();
+// let port = 7000;
 
-// const packages = require('./data/tour');
+// app.get("/", (req, res) => {
+//   res.send("Hello World");
+// });
 
-// app.get('/', (req, res) => {
-//     res.send('Hello World');
+// app.get("/packages", (req, res) => {
+//   const { des } = req.query;
+
+//   if (des) {
+//     const filtered = packages.filter((pkg) =>
+//       pkg.name.includes(des) || pkg.description.includes(des)
+//     );
+//     return res.json(filtered);
+//   }
+
+//   res.json(packages);
+// });
+
+// app.get("/packages/:id", (req, res) => {
+//   const packageId = parseInt(req.params.id);
+//   const package = packages.find((pkg) => pkg.id === packageId);
+//   if (package) {
+//     res.json(package);
+//   } else {
+//     res.status(404).json({ error: "Package not found" });
+//   }
+// });
+
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
 // });
 
 
-// app.get('/packages', (req, res) => {
-//     res.json(packages);
-// });
 
-// // use http://localhost:3000/packages in postman to get all the packages --------------------------------
+//______________________________________________________________________________________________________________
 
-// app.get('/packages/:id', (req, res) => {
-//     const packageId = parseInt(req.params.id);
-//     const selectedPackage = packages.find(pkg => pkg.id === packageId); // comparing what id we put in postman with the id in the packages array, if true then it will return the package with that id
-//     res.json(selectedPackage);
-// });
-// // use http://localhost:3000/packages/1 in postman to get the package with id 1 here
-// // --------------------------------
 
-// const PORT = process.env.PORT || 3000;
+//req.header is to send token in the header and req.query is to send token in the query string.
+//res.send is to send a response from server back to the client.
+//  res.json is to send a JSON response back to the client. 
+// res.status is to set the HTTP status code of the response.
+//MVC ko use karke hume data ko organise karna hota hai.
+//  Model, View, Controller ka use karke hum data ko alag alag layers me organize karte hai.
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
+//model is database se data ko handle karta hai, (interact with db)
+// view is user interface ko handle karta hai aur user ko data dikhata hai.
+//  controller is handling logic between model and view ko handle karta hai.
 
-// // query parameters are used to filter the data based on certain criteria. In this case, we can use query parameters to filter the packages based on the destination. For example, if we want to get all the packages that have a destination of "Maldives", we can use the following URL: http://localhost:3000/packages?des=Maldives
-// // http://localhost:3000/packages?des=maldieves
 
-const express = require('express');
+// 4 folders banate hai MVC me, model, view, controller aur routes.
+
+//_________________________________________________________________________________________________________________________
+
+//model - controller p - fir route p - fir index.js p - fir server start hoga aur client ko response milega.
+//this is bottom to top approach prefferable
+
+const express = require("express");
 const app = express();
+const tourRoute = require("./routes/tourRoute");
 
-const tourRoutes = require('./routes/tourRoutes');
+app.use(express.json()); //app.use is for middleware , authentication and autherization purpose
+app.use('/api', tourRoute);
 
-app.use(express.json());
-app.use('/api', tourRoutes);
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(7000, () => {
+  console.log("Server is running on port 7000");
 });
